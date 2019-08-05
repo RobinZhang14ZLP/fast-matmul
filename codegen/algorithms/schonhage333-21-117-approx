@@ -1,4 +1,4 @@
-# generated from Schonhage's 1981 paper 
+# generated from Schonhage's 1981 paper; error params: sigma=2, phi=2
      1     1     1     0     0     0     0     0     0     1     1     1     0     0     0     0     0     0     1     0     0
      x2     0     0     x2     0     0     x2     0     0     0     0     0     0     0     0     0     0     0     0     0     0
      0     0     0     0     0     0     0     0     0     x2     0     0     x2     0     0     x2     0     0     0     0     0
