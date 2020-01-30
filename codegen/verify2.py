@@ -73,7 +73,7 @@ class Number:
                         self.val[1] = 1
                         self.val[4] = -1
                     else:
-                        print "Not supported", arg1
+                        print( "Not supported", arg1 )
                         raise NotImplemented
             elif type(arg1) == type(defaultdict(lambda:0)):
                 # one argument, dict constructor
@@ -171,61 +171,61 @@ def main():
 	U = []
 	V = []
 	W = []
-	#for i in xrange(m*n):
+	#for i in range(m*n):
 	#    U.append([])
 	#    V.append([])
 	#    W.append([])
 	
 	nnz = 0
 	
-	for j in xrange(m*n):
+	for j in range(m*n):
 	    line = sys.stdin.readline().split()
 	    while line[0] == "#":
 	        line = sys.stdin.readline().split()
 	    U.append([])
-	    for i in xrange(q):
+	    for i in range(q):
 	        U[j].append(Number(line[i]))
 	        if line[i] != "0":
 	            nnz += 1
 	
-	for j in xrange(n*k):
+	for j in range(n*k):
 	    line = sys.stdin.readline().split()
 	    while line[0] == "#":
 	        line = sys.stdin.readline().split()
 	    V.append([])
-	    for i in xrange(q):
+	    for i in range(q):
 	        V[j].append(Number(line[i]))
 	        if line[i] != "0":
 	            nnz += 1
 	
-	for j in xrange(m*k):
+	for j in range(m*k):
 	    line = sys.stdin.readline().split()
 	    while line[0] == "#":
 	        line = sys.stdin.readline().split()
 	    W.append([])
-	    for i in xrange(q):
+	    for i in range(q):
 	        W[j].append(Number(line[i]))
 	        if line[i] != "0":
 	            nnz += 1
 	
-	print "U"
+	print( "U" )
 	for r in U:
-	    print r
-	print "V"
+	    print( r )
+	print( "V" )
 	for r in V:
-	    print r
-	print "W"
+	    print( r )
+	print( "W" )
 	for r in W:
-	    print r
-	print "Naive number of additions:", nnz-len(U[0])-len(V[0])-len(W)
+	    print( r )
+	print( "Naive number of additions:", nnz-len(U[0])-len(V[0])-len(W) )
 	
 	def isConnected(M):
 	    def add(s, r):
-	        for i in xrange(len(r)):
+	        for i in range(len(r)):
 	            if not r[i].exacteq(Number("0")):
 	                s.add(i)
 	    def overlap(s, r):
-	        for i in xrange(len(r)):
+	        for i in range(len(r)):
 	            if (not r[i].exacteq(Number("0"))) and i in s:
 	                return True
 	        return False
@@ -233,7 +233,7 @@ def main():
 	    add(current, M[0])
 	    while True:
 	        sOld = len(current)
-	        for j in xrange(len(M)):
+	        for j in range(len(M)):
 	            if overlap(current,M[j]):
 	                add(current,M[j])
 	        if len(current) == sOld:
@@ -243,33 +243,33 @@ def main():
 	    return False
 	
 	if not isConnected(U):
-	    print "U is disconnected"
+	    print( "U is disconnected" )
 	if not isConnected(V):
-	    print "V is disconnected"
+	    print( "V is disconnected" )
 	if not isConnected(W):
-	    print "W is disconnected"
+	    print( "W is disconnected" )
 	    
-	for a in xrange(m):
-	    for b in xrange(n):
+	for a in range(m):
+	    for b in range(n):
 	        # a and b describe row of U
 	        rU = a*n+b
-	        for c in xrange(n):
-	            for d in xrange(k):
+	        for c in range(n):
+	            for d in range(k):
 	                rV = c*k+d
-	                for e in xrange(m):
-	                    for f in xrange(k):
+	                for e in range(m):
+	                    for f in range(k):
 	                        rW = e*k+f
 	                        # compute the contribution
 	                        sum = Number("0")
-	                        for i in xrange(q):
+	                        for i in range(q):
 	                            sum += U[rU][i]*V[rV][i]*W[rW][i]
 	                        if a == e and b == c and d == f:
 	                            # should be a 1
 	                            if sum != Number("1"):
-	                                print "Trouble at", a, b, c, d, e, f, "sum should be 1, is ", sum
+	                                print( "Trouble at", a, b, c, d, e, f, "sum should be 1, is ", sum )
 	                        else:
 	                            if sum != Number("0"):
-	                                print "Trouble at", a, b, c, d, e, f, "sum should be 0, is ", sum
+	                                print( "Trouble at", a, b, c, d, e, f, "sum should be 0, is ", sum )
 
         #calculate parameter sigma & phi
         phi = 0
