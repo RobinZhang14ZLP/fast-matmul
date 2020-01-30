@@ -119,6 +119,7 @@ class Number:
                 return False
         return True
 
+    # find minimum index corresponding to nonzero
     def findmin(self):
         minnum = 5
         for p in self.val:
@@ -126,13 +127,6 @@ class Number:
                 minnum = p
         return minnum
 
-    def findmax(self):
-        maxnum = -5
-        for p in self.val:
-            if self.val[p] != 0  and p > maxnum:
-                maxnum = p
-        return maxnum
-        
     def __repr__(self):
         # assume it is simple
         if self.exacteq(Number("0")):
@@ -249,6 +243,8 @@ def main():
 	if not isConnected(W):
 	    print( "W is disconnected" )
 	    
+        # check algorithm and compute error parameter sigma
+        sigma = 5
 	for a in range(m):
 	    for b in range(n):
 	        # a and b describe row of U
@@ -267,13 +263,21 @@ def main():
 	                            # should be a 1
 	                            if sum != Number("1"):
 	                                print( "Trouble at", a, b, c, d, e, f, "sum should be 1, is ", sum )
+                                    else:
+                                        # subtract 1 for sigma computation below
+                                        sum += Number("-1")
 	                        else:
 	                            if sum != Number("0"):
 	                                print( "Trouble at", a, b, c, d, e, f, "sum should be 0, is ", sum )
+                                # if largest error term has smaller exponent, update smallest exponent
+                                tmin = sum.findmin()
+                                if tmin < sigma:
+                                    sigma = tmin
+                                #print(sum) # print error of this element
+        print "sigma: ", sigma
 
-        #calculate parameter sigma & phi
+        # calculate parameter phi
         phi = 0
-        sigma = 0
 
         Tmin = 5
         for a in xrange(q):
@@ -294,18 +298,6 @@ def main():
         phi =  -Tmin
         print "phi: ", phi
         
-        tmin = 5
-        for a in xrange(m*k):
-            sum = Number("0")
-            for b in xrange(m*n):
-                for c in xrange(n*k):
-                    for r in xrange(q):
-                        sum += U[b][r] * V[c][r] * W[a][r]
-            maxa = sum.findmax()
-            if maxa < tmin:
-                tmin = maxa
-        sigma = tmin
-        print "sigma: ", sigma
 
 if __name__ == '__main__':
     main()
