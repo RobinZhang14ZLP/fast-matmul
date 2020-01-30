@@ -118,6 +118,20 @@ class Number:
             if self.val[p] != other.val[p]:
                 return False
         return True
+
+    def findmin(self):
+        minnum = 5
+        for p in self.val:
+            if self.val[p] != 0 and p < minnum:
+                minnum = p
+        return minnum
+
+    def findmax(self):
+        maxnum = -5
+        for p in self.val:
+            if self.val[p] != 0  and p > maxnum:
+                maxnum = p
+        return maxnum
         
     def __repr__(self):
         # assume it is simple
@@ -256,6 +270,42 @@ def main():
 	                        else:
 	                            if sum != Number("0"):
 	                                print "Trouble at", a, b, c, d, e, f, "sum should be 0, is ", sum
+
+        #calculate parameter sigma & phi
+        phi = 0
+        sigma = 0
+
+        Tmin = 5
+        for a in xrange(q):
+            minU = 5
+            minV = 5
+            minW = 5
+            for b in xrange(m*n):
+                if U[b][a].findmin() < minU:
+                    minU = U[b][a].findmin()
+            for b in xrange(n*k):
+                if V[b][a].findmin() < minV:
+                    minV = V[b][a].findmin()
+            for b in xrange(k*m):
+                if W[b][a].findmin() < minW:
+                    minW = W[b][a].findmin()
+            if minU+minV+minW < Tmin:
+                Tmin = minU+minV+minW
+        phi =  -Tmin
+        print "phi: ", phi
+        
+        tmin = 5
+        for a in xrange(m*k):
+            sum = Number("0")
+            for b in xrange(m*n):
+                for c in xrange(n*k):
+                    for r in xrange(q):
+                        sum += U[b][r] * V[c][r] * W[a][r]
+            maxa = sum.findmax()
+            if maxa < tmin:
+                tmin = maxa
+        sigma = tmin
+        print "sigma: ", sigma
 
 if __name__ == '__main__':
     main()
