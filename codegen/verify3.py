@@ -7,84 +7,108 @@
 
 import sys
 from collections import defaultdict
+from fractions import Fraction
 
 # holds a polynomial in epsilon over integers (could be changed to floats pretty easily)
 # internal storage is a dict from powers of epsilon to coefficients
 class Number:
     def __init__( self, arg1, arg2=None ):
         self.orig = arg1
+        self.orig2 = None
         self.val = defaultdict(lambda:0)
-        if arg2 == None:
-            if type(arg1) == type( "1" ):
-                # one argument, string constructor
-                try:
-                    self.val[0] = int(arg1)
-                except:
-                    if arg1 == "x":
-                        self.val[1] = 1
-                    elif arg1 == "xi":
-                        self.val[-1] = 1
-                    elif arg1 == "-x":
-                        self.val[1] = -1
-                    elif arg1 == "-xi":
-                        self.val[-1] = -1
-                    elif arg1 == "x2":
-                        self.val[2] = 1
-                    elif arg1 == "-x2":
-                        self.val[2] = -1
-                    elif arg1 == "x2i":
-                        self.val[-2] = 1
-                    elif arg1 == "-x2i":
-                        self.val[-2] = -1
-                    elif arg1 == "-2x2":
-                        self.val[2] = -2
-                    elif arg1 == "x3":
-                        self.val[3] = 1
-                    elif arg1 == "-x3":
-                        self.val[3] = -1
-                    elif arg1 == "2x3":
-                        self.val[3] = 2
-                    elif arg1 == "-2x3":
-                        self.val[3] = -2
-                    elif arg1 == "x4":
-                        self.val[4] = 1
-                    elif arg1 == "(1+-x3)":
-                        self.val[0] = 1
-                        self.val[3] = -1
-                    elif arg1 == "(1+x2)":
-                        self.val[0] = 1
-                        self.val[2] = 1
-                    elif arg1 == "(x+x2)":
-                        self.val[1] = 1
-                        self.val[2] = 1
-                    elif arg1 == "(x2+x3)":
-                        self.val[2] = 1
-                        self.val[3] = 1
-                    elif arg1 == "(x+-x2)":
-                        self.val[1] = 1
-                        self.val[2] = -1
-                    elif arg1 == "(-x2+-x3)":
-                        self.val[2] = -1
-                        self.val[3] = -1
-                    elif arg1 == "(-x+x2)":
-                        self.val[1] = -1
-                        self.val[2] = 1
-                    elif arg1 == "(x+-x4)":
-                        self.val[1] = 1
-                        self.val[4] = -1
-                    else:
-                        print( "Not supported", arg1 )
-                        raise NotImplemented
-            elif type(arg1) == type(defaultdict(lambda:0)):
-                # one argument, dict constructor
-                self.val = arg1
-            else:
-                raise NotImplemented
+        co = 0
+        if type(arg1) == type( "1" ):
+            # one argument, string constructor
+            try:
+                self.val[0] = Fraction(arg1)
+            except:
+                if arg1 == "x":
+                    self.val[1] = 1
+                    co = 1
+                elif arg1 == "xi":
+                    self.val[-1] = 1
+                    co = -1
+                elif arg1 == "-x":
+                    self.val[1] = -1
+                    co = 1
+                elif arg1 == "-xi":
+                    self.val[-1] = -1
+                    co = -1
+                elif arg1 == "x2":
+                    self.val[2] = 1
+                    co = 2
+                elif arg1 == "-x2":
+                    self.val[2] = -1
+                    co = 2
+                elif arg1 == "x2i":
+                    self.val[-2] = 1
+                    co = -2
+                elif arg1 == "-x2i":
+                    self.val[-2] = -1
+                    co = -2
+                elif arg1 == "-2x2":
+                    self.val[2] = -2
+                    co = 2
+                elif arg1 == "x3":
+                    self.val[3] = 1
+                    co = 3
+                elif arg1 == "-x3":
+                    self.val[3] = -1
+                    co = 3
+                elif arg1 == "2x3":
+                    self.val[3] = 2
+                    co = 3
+                elif arg1 == "-2x3":
+                    self.val[3] = -2
+                    co = 3
+                elif arg1 == "x3i":
+                    self.val[-3] = 1
+                    co = -3
+                elif arg1 == "-x3i":
+                    self.val[-3] = -1
+                    co = -3
+                elif arg1 == "x4":
+                    self.val[4] = 1
+                    co = 4
+                elif arg1 == "(1+-x3)":
+                    self.val[0] = 1
+                    self.val[3] = -1
+                elif arg1 == "(1+x2)":
+                    self.val[0] = 1
+                    self.val[2] = 1
+                elif arg1 == "(x+x2)":
+                    self.val[1] = 1
+                    self.val[2] = 1
+                elif arg1 == "(x2+x3)":
+                    self.val[2] = 1
+                    self.val[3] = 1
+                elif arg1 == "(x+-x2)":
+                    self.val[1] = 1
+                    self.val[2] = -1
+                elif arg1 == "(-x2+-x3)":
+                    self.val[2] = -1
+                    self.val[3] = -1
+                elif arg1 == "(-x+x2)":
+                    self.val[1] = -1
+                    self.val[2] = 1
+                elif arg1 == "(x+-x4)":
+                    self.val[1] = 1
+                    self.val[4] = -1
+                else:
+                    print( "Not supported", arg1 )
+                    raise NotImplemented
+        elif type(arg1) == type(defaultdict(lambda:0)):
+            # one argument, dict constructor
+            self.val = arg1
         else:
+            raise NotImplemented
+        if arg2 != None:
             # two argument constructor
-            assert( type(arg1) == type(1) )
-            assert( type(arg2) == type(1) )
-            self.val[arg2]=arg1
+            #assert( type(arg1) == type(1) )
+            #assert( type(arg2) == type(1) )
+            #self.val[arg2]=arg1
+            self.orig2 = arg2
+            self.val[co] = Fraction(arg2)
     def __add__( self, other ):
         newVal = defaultdict(lambda:0)
         for p in self.val:
@@ -129,28 +153,30 @@ class Number:
 
     def __repr__(self):
         # assume it is simple
-        if self.exacteq(Number("0")):
-            return "0"
-        if self.exacteq(Number("1")):
-            return "1"
-        if self.exacteq(Number("-1")):
-            return "-1"
-        if self.exacteq(Number("x")):
-            return "x"
-        if self.exacteq(Number("-x")):
-            return "-x"
-        if self.exacteq(Number("xi")):
-            return "xi"
-        if self.exacteq(Number("-xi")):
-            return "-xi"
-        if self.exacteq(Number("x2")):
-            return "x2"
-        if self.exacteq(Number("-x2")):
-            return "-x2"
-        if self.exacteq(Number("x2i")):
-            return "x2i"
-        if self.exacteq(Number("-x2i")):
-            return "-x2i"
+        #if self.exacteq(Number("0")):
+            #return "0"
+        #if self.exacteq(Number("1")):
+            #return "1"
+        #if self.exacteq(Number("-1")):
+            #return "-1"
+        #if self.exacteq(Number("x")):
+            #return "x"
+        #if self.exacteq(Number("-x")):
+            #return "-x"
+        #if self.exacteq(Number("xi")):
+            #return "xi"
+        #if self.exacteq(Number("-xi")):
+            #return "-xi"
+        #if self.exacteq(Number("x2")):
+            #return "x2"
+        #if self.exacteq(Number("-x2")):
+            #return "-x2"
+        #if self.exacteq(Number("x2i")):
+            #return "x2i"
+        #if self.exacteq(Number("-x2i")):
+            #return "-x2i"
+        if self.orig2 != None:
+            return str(self.orig2) + str(self.orig)
         return str(self.orig)
 
 
@@ -178,7 +204,19 @@ def main():
 	        line = sys.stdin.readline().split()
 	    U.append([])
 	    for i in range(q):
-	        U[j].append(Number(line[i]))
+	        p = 0
+	        coef = ''
+	        while p < len(line[i]):
+	            if line[i][p] != "x":
+	                coef = coef + line[i][p]
+	                p += 1
+	            else:
+	                break
+	        if p == 0 or p == len(line[i]) or coef == '-' or coef == '(' or coef == '(-' or coef == '(1+-' or coef == '(1+':
+	            U[j].append(Number(line[i]))
+	        else:
+	            line[i] = line[i][p:]
+	            U[j].append(Number(line[i],coef))
 	        if line[i] != "0":
 	            nnz += 1
 	
@@ -188,7 +226,19 @@ def main():
 	        line = sys.stdin.readline().split()
 	    V.append([])
 	    for i in range(q):
-	        V[j].append(Number(line[i]))
+	        p = 0
+	        coef = ''
+	        while p < len(line[i]):
+	            if line[i][p] != "x":
+	                coef = coef + line[i][p]
+	                p += 1
+	            else:
+	                break
+	        if p == 0 or p == len(line[i]) or coef == '-' or coef == '(' or coef == '(-' or coef == '(1+-' or coef == '(1+':
+	            V[j].append(Number(line[i]))
+	        else:
+	            line[i] = line[i][p:]
+	            V[j].append(Number(line[i],coef))
 	        if line[i] != "0":
 	            nnz += 1
 	
@@ -198,7 +248,19 @@ def main():
 	        line = sys.stdin.readline().split()
 	    W.append([])
 	    for i in range(q):
-	        W[j].append(Number(line[i]))
+	        p = 0
+	        coef = ''
+	        while p < len(line[i]):
+	            if line[i][p] != "x":
+	                coef = coef + line[i][p]
+	                p += 1
+	            else:
+	                break
+	        if p == 0 or p == len(line[i]) or coef == '-' or coef == '(' or coef == '(-' or coef == '(1+-' or coef == '(1+':
+	            W[j].append(Number(line[i]))
+	        else:
+	            line[i] = line[i][p:]
+	            W[j].append(Number(line[i],coef))
 	        if line[i] != "0":
 	            nnz += 1
 	
