@@ -1,4 +1,4 @@
-# Smirnov's APA algorithm for rank 22 2x7x2;
+# Smirnov's APA algorithm for rank 22 2x7x2; error params: sigma = 1, phi = 5
 1 1/8 0 1 0 0 -1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0
 -1/50x -1/50x 0 1/50x 0 0 0 0 0 0 1/30x 0 0 0 0 0 0 0 0 0 0 0
 x2i 1/8x2i x2i x2i 0 -1/8x2i -x2i -x2i x2i 1/8 0 0 0 0 0 0 0 0 0 0 0 0

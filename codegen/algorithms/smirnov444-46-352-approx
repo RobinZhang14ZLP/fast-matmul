@@ -1,4 +1,4 @@
-# Smirnov's APA algorithm for rank 46 4x4x4; 
+# Smirnov's APA algorithm for rank 46 4x4x4; error params: sigma = 1, phi = 3
 x 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 x2 0 0 0 0 0 x2 x2 0 0 0 0 0 0 x2 0 0 0 0 0 0 0 0 0 0 0 0
 x 0 0 0 0 0 0 0 0 0 0 0 xi 0 0 0 0 0 0 0 0 0 0 -x 0 xi 0 0 0 -xi xi 0 0 1 0 0 0 0 0 xi 0 0 0 0 0 0
 -x 0 0 0 0 0 0 0 0 x 0 0 0 0 0 0 -x 0 0 0 0 0 0 x 0 0 0 x 0 0 0 0 0 -xi 0 0 0 0 0 0 0 0 0 0 xi 0
