@@ -1,4 +1,4 @@
-# the original algorithm
+# the original algorithm; error params: sigma = 1, phi = 1
 1  0  1  0   1   0  0  0  0   0
 0  0  0  x  x  0  0  0  0   0
 0  0  0  0   0   1  0  1  0   1

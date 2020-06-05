@@ -1,4 +1,4 @@
-# Smirnov's APA algorithm for rank 20 3x3x3
+# Smirnov's APA algorithm for rank 20 3x3x3; error params: sigma = 1, phi = 6
 x 0 0 -1 0 0 x x 0 0 0 0 0 -1 0 0 0 0 0 0
 0 0 0 x 0 0 -2x2 0 0 0 0 x2 0 x 0 -x2 0 0 0 0
 -x3 x3 0 0 -x3 0 0 -x3 0 0 0 0 0 x2 0 0 0 0 0 0
