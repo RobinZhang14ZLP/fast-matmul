@@ -22,81 +22,67 @@ class Number:
             try:
                 self.val[0] = Fraction(arg1)
             except:
-                if arg1 == "x":
-                    self.val[1] = 1
-                    co = 1
-                elif arg1 == "xi":
-                    self.val[-1] = 1
-                    co = -1
-                elif arg1 == "-x":
-                    self.val[1] = -1
-                    co = 1
-                elif arg1 == "-xi":
-                    self.val[-1] = -1
-                    co = -1
-                elif arg1 == "x2":
-                    self.val[2] = 1
-                    co = 2
-                elif arg1 == "-x2":
-                    self.val[2] = -1
-                    co = 2
-                elif arg1 == "x2i":
-                    self.val[-2] = 1
-                    co = -2
-                elif arg1 == "-x2i":
-                    self.val[-2] = -1
-                    co = -2
-                elif arg1 == "-2x2":
-                    self.val[2] = -2
-                    co = 2
-                elif arg1 == "x3":
-                    self.val[3] = 1
-                    co = 3
-                elif arg1 == "-x3":
-                    self.val[3] = -1
-                    co = 3
-                elif arg1 == "2x3":
-                    self.val[3] = 2
-                    co = 3
-                elif arg1 == "-2x3":
-                    self.val[3] = -2
-                    co = 3
-                elif arg1 == "x3i":
-                    self.val[-3] = 1
-                    co = -3
-                elif arg1 == "-x3i":
-                    self.val[-3] = -1
-                    co = -3
-                elif arg1 == "x4":
-                    self.val[4] = 1
-                    co = 4
-                elif arg1 == "(1+-x3)":
-                    self.val[0] = 1
-                    self.val[3] = -1
-                elif arg1 == "(1+x2)":
-                    self.val[0] = 1
-                    self.val[2] = 1
-                elif arg1 == "(x+x2)":
-                    self.val[1] = 1
-                    self.val[2] = 1
-                elif arg1 == "(x2+x3)":
-                    self.val[2] = 1
-                    self.val[3] = 1
-                elif arg1 == "(x+-x2)":
-                    self.val[1] = 1
-                    self.val[2] = -1
-                elif arg1 == "(-x2+-x3)":
-                    self.val[2] = -1
-                    self.val[3] = -1
-                elif arg1 == "(-x+x2)":
-                    self.val[1] = -1
-                    self.val[2] = 1
-                elif arg1 == "(x+-x4)":
-                    self.val[1] = 1
-                    self.val[4] = -1
-                else:
-                    print( "Not supported", arg1 )
-                    raise NotImplemented
+                nlc = 0 # non-linear combination of x
+                try:
+                    if arg1[0] != '(' and arg1[1] != '(':
+                        nlc = 1
+                except:
+                    if arg1[0] != '(':
+                        nlc = 1
+                if nlc:
+                    coef = ''
+                    expo = ''
+                    p = 0
+                    while p < len(arg1):
+                        if arg1[p] == 'x':
+                            break
+                        coef += arg1[p]
+                        p += 1
+                    if coef =='-':
+                        coef = '-1'
+                    elif coef == '':
+                        coef = '1'
+                    if p < len(arg1)-1:
+                        expo = arg1[p+1:]
+                        if expo == 'i':
+                            self.val[-1] = Fraction(coef)
+                        elif expo[-1] == 'i':
+                            ex = -1*int(expo[:-1])
+                            self.val[ex] = Fraction(coef)
+                        else:
+                            self.val[int(expo)] = Fraction(coef)
+                    elif p == len(arg1)-1:
+                        self.val[1] = Fraction(coef)
+                    else:
+                        self.val[0] = Fraction(coef)
+                else: # special cases for linear combination
+                    if arg1 == "(1+-x3)":
+                        self.val[0] = 1
+                        self.val[3] = -1
+                    elif arg1 == "(1+x2)":
+                        self.val[0] = 1
+                        self.val[2] = 1
+                    elif arg1 == "(x+x2)":
+                        self.val[1] = 1
+                        self.val[2] = 1
+                    elif arg1 == "(x2+x3)":
+                        self.val[2] = 1
+                        self.val[3] = 1
+                    elif arg1 == "(x+-x2)":
+                        self.val[1] = 1
+                        self.val[2] = -1
+                    elif arg1 == "(-x2+-x3)":
+                        self.val[2] = -1
+                        self.val[3] = -1
+                    elif arg1 == "(-x+x2)":
+                        self.val[1] = -1
+                        self.val[2] = 1
+                    elif arg1 == "(x+-x4)":
+                        self.val[1] = 1
+                        self.val[4] = -1
+                    else:
+                        print( "Not supported", arg1 )
+                        raise NotImplemented
         elif type(arg1) == type(defaultdict(lambda:0)):
             # one argument, dict constructor
             self.val = arg1
@@ -104,11 +90,11 @@ class Number:
             raise NotImplemented
         if arg2 != None:
             # two argument constructor
-            #assert( type(arg1) == type(1) )
-            #assert( type(arg2) == type(1) )
-            #self.val[arg2]=arg1
-            self.orig2 = arg2
-            self.val[co] = Fraction(arg2)
+            assert( type(arg1) == type(1) )
+            assert( type(arg2) == type(1) )
+            self.val[arg2]=arg1
+            #self.orig2 = arg2
+            #self.val[co] = Fraction(arg2)
     def __add__( self, other ):
         newVal = defaultdict(lambda:0)
         for p in self.val:
@@ -204,19 +190,7 @@ def main():
 	        line = sys.stdin.readline().split()
 	    U.append([])
 	    for i in range(q):
-	        p = 0
-	        coef = ''
-	        while p < len(line[i]):
-	            if line[i][p] != "x":
-	                coef = coef + line[i][p]
-	                p += 1
-	            else:
-	                break
-	        if p == 0 or p == len(line[i]) or coef == '-' or coef == '(' or coef == '(-' or coef == '(1+-' or coef == '(1+':
-	            U[j].append(Number(line[i]))
-	        else:
-	            line[i] = line[i][p:]
-	            U[j].append(Number(line[i],coef))
+	        U[j].append(Number(line[i]))
 	        if line[i] != "0":
 	            nnz += 1
 	
@@ -226,19 +200,7 @@ def main():
 	        line = sys.stdin.readline().split()
 	    V.append([])
 	    for i in range(q):
-	        p = 0
-	        coef = ''
-	        while p < len(line[i]):
-	            if line[i][p] != "x":
-	                coef = coef + line[i][p]
-	                p += 1
-	            else:
-	                break
-	        if p == 0 or p == len(line[i]) or coef == '-' or coef == '(' or coef == '(-' or coef == '(1+-' or coef == '(1+':
-	            V[j].append(Number(line[i]))
-	        else:
-	            line[i] = line[i][p:]
-	            V[j].append(Number(line[i],coef))
+	        V[j].append(Number(line[i]))
 	        if line[i] != "0":
 	            nnz += 1
 	
@@ -248,19 +210,7 @@ def main():
 	        line = sys.stdin.readline().split()
 	    W.append([])
 	    for i in range(q):
-	        p = 0
-	        coef = ''
-	        while p < len(line[i]):
-	            if line[i][p] != "x":
-	                coef = coef + line[i][p]
-	                p += 1
-	            else:
-	                break
-	        if p == 0 or p == len(line[i]) or coef == '-' or coef == '(' or coef == '(-' or coef == '(1+-' or coef == '(1+':
-	            W[j].append(Number(line[i]))
-	        else:
-	            line[i] = line[i][p:]
-	            W[j].append(Number(line[i],coef))
+	        W[j].append(Number(line[i]))
 	        if line[i] != "0":
 	            nnz += 1
 	
